@@ -89,3 +89,87 @@ Other Types:
 * BOOLEAN/BOOL (true/false values)
 * JSON (for storing JSON documents)
 * ENUM (predefined list of values)
+
+# BASICS OF SQL
+## Writing Simple Queries (Select, From , Where)
+1. Write a query to retrieve all customer names and emails from the customers table.
+2. Write a query to find all products that cost more than $75.00.
+3. Write a query to find all orders placed after July 1, 2023, with a total amount greater than $150.00.
+
+```sql
+SELECT FIRST_NAME, LAST_NAME, EMAIL
+FROM CUSTOMERS;
+
+SELECT PRODUCT_NAME, PRICE
+FROM PRODUCTS
+WHERE PRICE > 50.00;
+
+SELECT *
+FROM ORDERS
+WHERE ORDER_DATE >= '2023-07-01'
+AND TOTAL_AMOUNT > 100;
+```
+
+## Sorting Data (Order By)
+1. Write a query to list all products sorted by price from lowest to highest.
+2. Write a query to show all products sorted by price from highest to lowest.
+3. Write a query to display all customers sorted first by city (alphabetically), then by last name (alphabetically).
+```sql
+SELECT PRODUCT_NAME, PRICE
+FROM PRODUCTS
+ORDER BY PRICE;
+
+SELECT PRODUCT_NAME, PRICE
+FROM PRODUCTS
+ORDER BY PRICE DESC;
+
+SELECT FIRST_NAME, LAST_NAME, CITY
+FROM CUSTOMERS
+ORDER BY CITY ASC, LAST_NAME DESC;
+```
+
+## Filtering with Conditions (AND, OR, NOT)
+1. Write a query to find all products in the 'Electronics' category that cost less than $500.00.
+2. Write a query to find all products that are either in the 'Electronics' category OR in the 'Books' category.
+3. Write a query to find all customers who are NOT from 'New York'.
+4. Write a query to find all orders that are either 'Shipped' or 'Delivered' AND have a total amount of at least $50.00.
+
+```sql
+SELECT * FROM PRODUCTS
+WHERE CATEGORY = 'ELECTRONICS'
+	AND PRICE < 500;
+
+SELECT * FROM PRODUCTS
+WHERE CATEGORY IN ('ELECTRONICS', 'SPORTS');
+
+SELECT * FROM CUSTOMERS
+WHERE CITY != 'NEW YORK';
+
+SELECT * FROM ORDERS
+WHERE STATUS IN ('SHIPPED', 'COMPLETED')
+AND TOTAL_AMOUNT >= 50;
+```
+
+## Using Aliases (AS for columns and tables)
+1. Write a query to display customer names with column aliases 'FirstName' and 'LastName', and email as 'CustomerEmail'.
+2. Write a query using table aliases to join customers and orders tables, showing customer names and order dates.
+3. Write a query that shows product names and their prices, plus a calculated column showing a 10% discounted price (aliased as 'discounted_price').
+
+```sql
+SELECT FIRST_NAME AS FirstName,
+	LAST_NAME AS LastName,
+	EMAIL AS CustomerEmail
+FROM CUSTOMERS;
+
+SELECT C.FIRST_NAME, C.LAST_NAME, O.ORDER_DATE
+FROM CUSTOMERS AS C
+INNER JOIN ORDERS AS O ON C.CUSTOMER_ID = O.CUSTOMER_ID;
+
+SELECT P.PRODUCT_NAME, P.PRICE, (P.PRICE * 0.9) AS DISCOUNTED_PRICE
+FROM PRODUCTS AS P;
+```
+
+> INNER JOIN is a SQL operation that combines rows from two or more tables based on a 
+related column between them. It only returns records that have matching values in 
+both tables.
+
