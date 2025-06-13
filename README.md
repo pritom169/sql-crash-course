@@ -173,3 +173,32 @@ FROM PRODUCTS AS P;
 related column between them. It only returns records that have matching values in 
 both tables.
 
+# Working with Data
+## Aggregating Data (COUNT, SUM, AVG, MIN, MAX)
+1. Write a query to count the total number of customers in the database.
+2. Write a query to calculate the total revenue from all orders.
+3. Write a query to find the average price of all products.
+4. Write a query to find both the lowest and highest priced products.
+5. Write a query that shows the total number of products, average price, and total 
+inventory (sum of stock_quantity) in one result.
+
+```sql
+SELECT COUNT(*) AS TOTAL_CUSTOMERS
+FROM CUSTOMERS;
+
+SELECT SUM(TOTAL_AMOUNT) AS TotalAmount
+FROM ORDERS;
+
+SELECT AVG(PRICE) AS AVERAGEPRICE
+FROM PRODUCTS;
+
+SELECT MIN(PRICE) AS LOWEST_PRICED_PRODUCT,
+	MAX(PRICE) AS HIGHEST_PRICED_PRODUCT
+FROM PRODUCTS;
+
+SELECT COUNT(*) AS TOTAL_AMOUNT_OF_PRODUCTS,
+	AVG(PRICE) AS AVG_PRICE,
+    SUM(STOCK_QUANTITY) AS TOTAL_INVENTORY
+FROM PRODUCTS;
+```
+
