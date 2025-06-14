@@ -202,3 +202,38 @@ SELECT COUNT(*) AS TOTAL_AMOUNT_OF_PRODUCTS,
 FROM PRODUCTS;
 ```
 
+## Grouping Data
+1. Write a query to count how many customers are in each city.
+2. Write a query to calculate the total revenue for each product category (using order_items and products tables).
+3. Write a query to count how many orders exist for each order status.
+
+```sql
+SELECT CITY, COUNT(*) as CUSTOMER_COUNT FROM CUSTOMERS
+GROUP BY CITY;
+
+SELECT P.CATEGORY,
+	COUNT(DISTINCT OI.ORDER_ID) AS ORDER_COUNT,
+    SUM(OI.QUANTITY * OI.UNIT_PRICE) AS CATEGORY_REVENUE
+FROM ORDER_ITEMS AS OI
+JOIN PRODUCTS AS P ON P.PRODUCT_ID = OI.PRODUCT_ID
+GROUP BY P.CATEGORY;
+
+SELECT COUNT(ORDER_ID) AS TOTAL_ORDERS,
+		STATUS AS ORDER_STATUS
+FROM ORDERS
+GROUP BY STATUS;
+```
+
+> A JOIN in SQL is an operation that combines rows from two or more tables based on a related 
+column between them. When you use JOIN without any prefix (just the keyword JOIN), it's 
+technically an INNER JOIN. It returns only rows where there's a match in both tables.
+Rows that don't have matches in both tables are excluded from the results.
+
+## Filtering Aggregated Results (HAVING)
+1. Write a query to find all cities that have more than 5 customers.
+2. Write a query to find product categories where the average price is above $100.00.
+3. Write a query to find customers who have spent more than $1000.00 in total across all their orders.
+
+```sql
+
+```
