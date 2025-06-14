@@ -255,3 +255,36 @@ HAVING SUM(O.TOTAL_AMOUNT) >= 50;
 > The HAVING clause in SQL is used to filter the results of a GROUP BY operation. Unlike the 
 WHERE clause (which filters individual rows before grouping), HAVING filters aggregated results 
 after grouping. 
+
+## Dealing with NULL Values (IS NULL, COALESCE)
+1. Write a query to find all products that have NULL stock_quantity.
+2. Write a query to find all customers who don't have an email address (NULL email).
+3. Write a query to display all products with their stock quantity, showing 0 instead of NULL for products 
+with no stock.
+4. Write a query that shows customer_id and contact information, using email first, then phone if email is 
+NULL, or 'No contact info' if both are NULL.
+
+```sql
+SELECT * 
+FROM PRODUCTS
+WHERE STOCK_QUANTITY IS NULL;
+
+SELECT *
+FROM CUSTOMERS
+WHERE EMAIL IS NULL;
+
+SELECT PRODUCT_NAME, coalesce(STOCK_QUANTITY, 0) AS CURRENT_STOCK
+FROM PRODUCTS;
+
+SELECT
+	CUSTOMER_ID,
+    COALESCE (EMAIL, FIRST_NAME, LAST_NAME, 'NO CONTACT INFO') AS CONTACT_INFO
+FROM CUSTOMERS;
+```
+
+> What COALESCE does, COALESCE(value1, value2, value3, ...) returns the first non-NULL value from left to right
+If stock_quantity is NULL → returns 0 , If stock_quantity has any actual value (including 0) → returns that value
+
+- Product with stock_quantity = 5 → shows 5
+- Product with stock_quantity = 0 → shows 0
+- Product with stock_quantity = NULL → shows 0
