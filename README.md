@@ -235,5 +235,23 @@ Rows that don't have matches in both tables are excluded from the results.
 3. Write a query to find customers who have spent more than $1000.00 in total across all their orders.
 
 ```sql
+SELECT CITY, COUNT(*) AS TOTAL_COUNT
+FROM CUSTOMERS
+GROUP BY CITY
+HAVING COUNT(*) >= 1;
 
+SELECT CATEGORY, AVG(PRICE) AS AVG_PRICE
+FROM PRODUCTS
+GROUP BY CATEGORY
+HAVING AVG(PRICE) >= 20;
+
+SELECT C.FIRST_NAME, C.LAST_NAME, SUM(O.TOTAL_AMOUNT) AS TOTAL_PURCHASE
+FROM CUSTOMERS AS C
+JOIN ORDERS AS O ON O.CUSTOMER_ID = C.CUSTOMER_ID
+GROUP BY C.FIRST_NAME, C.LAST_NAME
+HAVING SUM(O.TOTAL_AMOUNT) >= 50;
 ```
+
+> The HAVING clause in SQL is used to filter the results of a GROUP BY operation. Unlike the 
+WHERE clause (which filters individual rows before grouping), HAVING filters aggregated results 
+after grouping. 
