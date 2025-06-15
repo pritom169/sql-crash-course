@@ -288,3 +288,74 @@ If stock_quantity is NULL → returns 0 , If stock_quantity has any actual value
 - Product with stock_quantity = 5 → shows 5
 - Product with stock_quantity = 0 → shows 0
 - Product with stock_quantity = NULL → shows 0
+
+## Joining Tables
+### Inner Join
+- Write a query using INNER JOIN to show customer names along with their order information (order_id, 
+order_date, total_amount).
+
+```sql
+SELECT C.FIRST_NAME, C.LAST_NAME, O.ORDER_ID, O.ORDER_DATE, O.TOTAL_AMOUNT
+FROM CUSTOMERS AS C
+INNER JOIN ORDERS AS O ON O.CUSTOMER_ID = C.CUSTOMER_ID;
+```
+> Returns only rows that have matching values in both tables.
+
+> When we write join, the command "INNER JOIN" has to come after "From"
+
+### Left Join
+- Write a query using LEFT JOIN to show all customers and their order count, including customers who haven't 
+placed any orders.
+
+```sql
+SELECT C.FIRST_NAME, C.LAST_NAME, COUNT(distinct O.CUSTOMER_ID) AS ORDER_COUNT
+FROM CUSTOMERS AS C
+LEFT JOIN ORDERS AS O ON O.CUSTOMER_ID = C.CUSTOMER_ID
+GROUP BY C.CUSTOMER_ID;
+```
+> Left join returns all rows from the left table, plus matching rows from the right table. NULL for non-matches.
+
+> One other note, all aggegated commands should be followed by group by.
+
+### Right Join
+- Write a query using RIGHT JOIN to show all orders with customer information, including orders that might 
+not have associated customer records.
+
+```sql
+SELECT C.FIRST_NAME, C.LAST_NAME, O.ORDER_ID
+FROM CUSTOMERS AS C
+RIGHT JOIN ORDERS AS O ON C.CUSTOMER_ID = O.CUSTOMER_ID;
+```
+> Right join returns all rows from the right table, plus matching rows from the left table. 
+NULL for non-matches.
+
+### Cross Join
+- Write a query using CROSS JOIN to create a result set showing every product name paired with every 
+distinct category in the products table.
+```sql
+SELECT DISTINCT
+    p1.product_name,
+    p2.category
+FROM products p1
+CROSS JOIN PRODUCTS AS p2;
+```
+
+> Returns the cartesian product—every row in the first table combined with every row
+in the second table and vise versa. 
+
+### Combining Data from Multiple Tables Using Foreign Keys
+- Write a query that joins all four tables to show complete order details including: customer name 
+(concatenated), order date, product name, quantity, unit price, and calculated line total.
+```sql
+SELECT
+	CONCAT(C.FIRST_NAME , ' ' , C.LAST_NAME) AS CUSTOMER_NAME,
+    O.ORDER_DATE,
+    P.PRODUCT_NAME,
+    OI.QUANTITY,
+    OI.UNIT_PRICE,
+    (OI.QUANTITY * OI.UNIT_PRICE) AS LINE_TOTAL
+FROM CUSTOMERS AS C
+JOIN ORDERS AS O ON O.CUSTOMER_ID = C.CUSTOMER_ID
+JOIN ORDER_ITEMS AS OI ON OI.ORDER_ID = O.ORDER_ID
+JOIN PRODUCTS AS P ON P.PRODUCT_ID = OI.PRODUCT_ID;
+```
