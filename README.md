@@ -480,4 +480,22 @@ FROM ORDERS;
 
 ### Partitioning Data (PARTITION BY)
 1. Write a query to rank products within each category by price (highest to lowest).
-2. Write a query showing each customer's orders with a running total of their purchases, resetting for each customer.
+2. Write a query showing each customer's orders with a running total of their purchases, 
+resetting for each customer.
+
+```sql
+--Rank by each category
+SELECT
+    ORDER_DATE,
+    UNIT_PRICE,
+    RANK() OVER (PARTITION BY CATEGORY ORDER BY ORDER_DATE) AS CATEGORY_RANK
+FROM ORDER_ITEMS;
+
+--Rank by partition
+SELECT
+	C.CUSTOMER_ID,
+	CONCAT(C.FIRST_NAME, ' ', C.LAST_NAME) AS CUSTOMER_NAME,
+    RANK() OVER (PARTITION BY C.CUSTOMER_ID ORDER BY O.ORDER_DATE) AS CUSTOMER_RUNNING_TOTAL
+FROM ORDERS AS O
+JOIN CUSTOMERS C ON O.CUSTOMER_ID = C.CUSTOMER_ID;
+```
