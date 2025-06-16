@@ -359,3 +359,67 @@ JOIN ORDERS AS O ON O.CUSTOMER_ID = C.CUSTOMER_ID
 JOIN ORDER_ITEMS AS OI ON OI.ORDER_ID = O.ORDER_ID
 JOIN PRODUCTS AS P ON P.PRODUCT_ID = OI.PRODUCT_ID;
 ```
+
+## Subqueries and Common Table Expressions (CTEs)
+### Subqueries in SELECT Clause
+- Write a query that shows each customer's first name, last name, and their average order value (calculated using a subquery in the SELECT clause).
+```sql
+select c.first_name, c.last_name,
+	(select avg(total_amount)
+    from orders o
+    where o.customer_id = c.customer_id) as avg_order_value
+from customers as c;
+```
+
+### Subqueries in FROM Clause
+- Write a query that uses a subquery in the FROM clause to first calculate average price by category, then filters to show only categories with average price above $50.
+```sql
+select CATEGORY, AVG_PRICE
+	FROM (SELECT CATEGORY, AVG(PRICE) AS AVG_PRICE
+	FROM PRODUCTS
+	GROUP BY CATEGORY
+	) AS CATEGORY_STATS
+WHERE AVG_PRICE > 10;
+```
+
+### Subqueries in WHERE Clause
+- Write a query to find all customers who have placed at least one order with a total amount above the overall average order amount.
+
+```sql
+SELECT DISTINCT CONCAT(C.FIRST_NAME, ' ', C.LAST_NAME) AS FULL_NAME
+FROM CUSTOMERS AS C
+WHERE C.CUSTOMER_ID IN (
+	SELECT CUSTOMER_ID
+    FROM ORDERS
+    WHERE TOTAL_AMOUNT > (SELECT AVG(TOTAL_AMOUNT) FROM ORDERS)
+);
+```
+
+### Common Table Expressions (WITH)
+1. Write a query using CTEs to:
+   * First calculate each customer's order count and lifetime value
+   * Then assign customer segments based on lifetime value (VIP >= $5000, Gold >= $1000, Silver >= $100, Bronze < $100)
+   * Finally display the results ordered by lifetime value descending
+
+```sql
+WITH CUSTOMER_LIFETIME_ORDERS AS (
+	SELECT C.CUSTOMER_ID, CONCAT(C.FIRST_NAME, ' ', C.LAST_NAME) AS FULL_NAME,
+			COUNT(O.ORDER_ID) AS TOTAL_ORDER_COUNT, SUM(O.TOTAL_AMOUNT) AS LIFETIME_ORDER_VALUE
+	FROM CUSTOMERS AS C
+    JOIN ORDERS AS O ON O.CUSTOMER_ID = C.CUSTOMER_ID
+    GROUP BY C.CUSTOMER_ID, C.FIRST_NAME, C.LAST_NAME
+),
+CUSTOMER_LIFETIME_VALUE AS (
+	SELECT *,
+		CASE
+			WHEN LIFETIME_ORDER_VALUE >= 5000 THEN 'VIP'
+            WHEN LIFETIME_ORDER_VALUE >= 1000 THEN 'GOLD'
+            WHEN LIFETIME_ORDER_VALUE >= 100 THEN 'SILVER'
+            ELSE 'BRONZE'
+		END AS ORDER_CLASS
+	FROM CUSTOMER_LIFETIME_ORDERS
+)
+
+SELECT * FROM CUSTOMER_LIFETIME_VALUE
+ORDER BY LIFETIME_ORDER_VALUE DESC;
+```
