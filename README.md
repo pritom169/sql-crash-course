@@ -423,3 +423,45 @@ CUSTOMER_LIFETIME_VALUE AS (
 SELECT * FROM CUSTOMER_LIFETIME_VALUE
 ORDER BY LIFETIME_ORDER_VALUE DESC;
 ```
+
+## Window Functions
+### Ranking and Row Numbering (ROW_NUMBER, RANK, DENSE_RANK)
+1. Write a query using ROW_NUMBER() to assign a unique sequential number to products 
+ordered by price (highest to lowest).
+2. Write a query using RANK() to rank products by price (highest to lowest), allowing for ties.
+3. Write a query using DENSE_RANK() to rank products by price (highest to lowest) without 
+gaps in ranking numbers.
+```sql
+-- ROW_NUMBER
+SELECT
+	PRODUCT_NAME,
+    CATEGORY,
+    PRICE,
+    ROW_NUMBER() OVER (ORDER BY PRICE DESC) AS PRICE_RANK
+FROM PRODUCTS;
+
+-- RANK
+SELECT 
+	PRODUCT_ID,
+    PRODUCT_NAME,
+    CATEGORY,
+    RANK() OVER (ORDER BY PRICE DESC) AS PRICE_RANK
+FROM PRODUCTS;
+
+--DENSE RANK
+SELECT
+	PRODUCT_ID,
+    PRODUCT_NAME,
+    PRICE,
+    DENSE_RANK() OVER (ORDER BY PRICE DESC) AS PRICE_RANK
+FROM PRODUCTS;
+```
+### Calculating Running Totals and Moving Averages
+1. Write a query to calculate a running total of order amounts, ordered by order date.
+2. Write a query to calculate a 3-day moving average of order amounts (current day plus 2 preceding days).
+
+
+
+### Partitioning Data (PARTITION BY)
+1. Write a query to rank products within each category by price (highest to lowest).
+2. Write a query showing each customer's orders with a running total of their purchases, resetting for each customer.
