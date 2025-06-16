@@ -448,7 +448,7 @@ SELECT
     RANK() OVER (ORDER BY PRICE DESC) AS PRICE_RANK
 FROM PRODUCTS;
 
---DENSE RANK
+-- DENSE RANK
 SELECT
 	PRODUCT_ID,
     PRODUCT_NAME,
@@ -458,9 +458,25 @@ FROM PRODUCTS;
 ```
 ### Calculating Running Totals and Moving Averages
 1. Write a query to calculate a running total of order amounts, ordered by order date.
-2. Write a query to calculate a 3-day moving average of order amounts (current day plus 2 preceding days).
+2. Write a query to calculate a 3-day moving average of order amounts (current day plus 2 
+preceding days).
 
+```SQL
+SELECT
+	ORDER_DATE,
+    TOTAL_AMOUNT,
+    SUM(TOTAL_AMOUNT) OVER (ORDER BY ORDER_DATE) AS RUNNING_TOTAL
+FROM ORDERS;
 
+SELECT
+	ORDER_DATE,
+    TOTAL_AMOUNT,
+    AVG(TOTAL_AMOUNT) OVER (
+		ORDER BY ORDER_DATE
+        ROWS BETWEEN 2 PRECEDING AND CURRENT ROW
+    ) AS MOVING_AVG_3DAY
+FROM ORDERS;
+```
 
 ### Partitioning Data (PARTITION BY)
 1. Write a query to rank products within each category by price (highest to lowest).
