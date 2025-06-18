@@ -499,3 +499,47 @@ SELECT
 FROM ORDERS AS O
 JOIN CUSTOMERS C ON O.CUSTOMER_ID = C.CUSTOMER_ID;
 ```
+
+# Data Transformation
+## String Manipulation Functions
+1. Write a query to concatenate first_name and last_name into a single 'full_name' column.
+2. Write a query to extract the username portion from email addresses (everything before the 
+@ symbol).
+3. Write a query to display first names in uppercase and emails in lowercase.
+4. Write a query that creates a 3-letter category code (uppercase) from the category name, 
+and formats product names with first letter uppercase and rest lowercase.
+
+```sql
+SELECT CONCAT(FIRST_NAME, ' ', LAST_NAME) AS FULL_NAME
+FROM CUSTOMERS;
+
+SELECT
+	EMAIL,
+    SUBSTRING(EMAIL, 1, LOCATE('@', EMAIL) - 1) AS USERNAME
+FROM CUSTOMERS;
+    
+SELECT
+	UPPER(FIRST_NAME),
+    LOWER(EMAIL)
+FROM CUSTOMERS;
+
+SELECT
+	UPPER(SUBSTRING(CATEGORY, 1, 3)) AS CATEGORY_SHORTEND,
+    CONCAT(UPPER(LEFT(PRODUCT_NAME,1)), LOWER(SUBSTRING(PRODUCT_NAME, 2, LENGTH(PRODUCT_NAME)))) AS FORMATTED_PRODUCT_NAME
+FROM PRODUCTS;
+```
+
+## Date Functions
+1. Write a query to extract year, month, and day as separate columns from order_date.
+2. Write a query that shows order_date, estimated delivery_date (7 days after order), and days 
+elapsed since the order was placed.
+3. Write a query showing customer names, registration dates, how many months they've been 
+customers, and their one-year anniversary date.
+
+## Mathematical Operations
+1. Write a query showing product names and prices, with prices rounded to nearest whole number 
+and price with 8% tax (rounded to 2 decimal places).
+2. Write a query showing product names with price, price rounded down (FLOOR), and price rounded 
+up (CEILING).
+3. Write a query that calculates estimated profit (15% of total_amount, rounded to 2 decimals) 
+and shipping units needed (total_amount divided by 50, rounded up) for each order.
