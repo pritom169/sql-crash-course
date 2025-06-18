@@ -500,8 +500,8 @@ FROM ORDERS AS O
 JOIN CUSTOMERS C ON O.CUSTOMER_ID = C.CUSTOMER_ID;
 ```
 
-# Data Transformation
-## String Manipulation Functions
+## Data Transformation
+### String Manipulation Functions
 1. Write a query to concatenate first_name and last_name into a single 'full_name' column.
 2. Write a query to extract the username portion from email addresses (everything before the 
 @ symbol).
@@ -529,14 +529,55 @@ SELECT
 FROM PRODUCTS;
 ```
 
-## Date Functions
+### Date Functions
 1. Write a query to extract year, month, and day as separate columns from order_date.
 2. Write a query that shows order_date, estimated delivery_date (7 days after order), and days 
 elapsed since the order was placed.
 3. Write a query showing customer names, registration dates, how many months they've been 
 customers, and their one-year anniversary date.
 
-## Mathematical Operations
+```sql
+SELECT
+	YEAR(ORDER_DATE) AS ORDER_YEAR,
+    MONTH(ORDER_DATE) AS ORDER_MONTH,
+    DAY(ORDER_DATE) AS ORDER_DAY
+FROM ORDERS;
+
+SELECT
+	ORDER_DATE,
+    DATE_ADD(ORDER_DATE, INTERVAL 7 DAY) AS DELIVERY_DATE,
+    DATEDIFF(CURDATE(), ORDER_DATE) AS DAYS_SINCE_ORDER
+FROM ORDERS;
+
+SELECT
+	CONCAT(FIRST_NAME, ' ' , LAST_NAME) AS CUSTOMER_NAME,
+    REGISTRTION_DATE AS REGISTRATION_DATE,
+    DATEDIFF(CURDATE(), REGISTRTION_DATE) AS CUSTOMER_DURATION,
+    DATE_ADD(REGISTRTION_DATE, INTERVAL 1 YEAR) AS ANNIVERSARY_DATE
+FROM CUSTOMERS;
+```
+
+Core MySQL Date Functions:
+Current Date/Time:
+1. NOW() - current datetime
+2. CURDATE() - current date only
+3. CURTIME() - current time only
+
+Date Arithmetic:
+1. DATE_ADD(date, INTERVAL value unit) - add time periods
+2. DATE_SUB(date, INTERVAL value unit) - subtract time periods
+3. DATEDIFF(date1, date2) - days between dates
+
+Extraction:
+1. YEAR(date), MONTH(date), DAY(date) - extract parts
+2. DAYNAME(date), MONTHNAME(date) - get names
+3. DAYOFWEEK(date), DAYOFYEAR(date) - get positions
+
+Formatting:
+1. DATE_FORMAT(date, format) - custom formatting
+2. STR_TO_DATE(string, format) - parse string to date
+
+### Mathematical Operations
 1. Write a query showing product names and prices, with prices rounded to nearest whole number 
 and price with 8% tax (rounded to 2 decimal places).
 2. Write a query showing product names with price, price rounded down (FLOOR), and price rounded 
