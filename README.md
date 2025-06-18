@@ -584,3 +584,23 @@ and price with 8% tax (rounded to 2 decimal places).
 up (CEILING).
 3. Write a query that calculates estimated profit (15% of total_amount, rounded to 2 decimals) 
 and shipping units needed (total_amount divided by 50, rounded up) for each order.
+
+```sql
+SELECT
+	PRODUCT_NAME,
+    ROUND(PRICE) AS PRODUCT_PRICE,
+    ROUND(PRICE * 1.08, 2) AS PRICE_WITH_TAX
+FROM PRODUCTS;
+
+SELECT
+	PRODUCT_NAME,
+    CEILING(PRICE) AS CEILING_PRICE,
+    FLOOR(PRICE) AS FLOOR_PRICE
+FROM PRODUCTS;
+
+SELECT
+	CUSTOMER_ID,
+    ROUND(TOTAL_AMOUNT * 0.15, 2) AS ESTIMATED_PROFIT,
+    CEILING(TOTAL_AMOUNT / 50) AS SHIPPING_UNITS
+FROM ORDERS;
+```
